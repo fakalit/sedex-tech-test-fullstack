@@ -3,9 +3,7 @@ package com.sedex.connect.domain.company
 import Address
 import io.ktor.features.*
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeParseException
-import java.util.*
 
 data class CompanyRequest(
     val companyName: String = "name",
