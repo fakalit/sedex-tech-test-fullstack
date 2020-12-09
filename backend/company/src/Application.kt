@@ -2,10 +2,14 @@ package com.sedex.connect
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.sedex.connect.domain.company.Company
+import com.sedex.connect.domain.company.CompanyRequest
+import com.sedex.connect.domain.company.fromCompanyRequest
 import com.sedex.connect.domain.company.toCompanyResponse
 import io.ktor.application.*
 import io.ktor.features.*
+import io.ktor.http.*
 import io.ktor.jackson.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import java.util.*
@@ -35,7 +39,21 @@ fun Application.module(testing: Boolean = false) {
             get {
                 call.respond(mapOf("items" to synchronized(companies) { companies.values.toList().map { it.toCompanyResponse() } } ))
             }
+            post {
+                val companyRequest = call.receive<CompanyRequest>()
+                val newCompany = Company.fromCompanyRequest(companyRequest)
+                newCompany.id = UUID.randomUUID()
+                companies[newCompany.id] = newCompany
+                call.respond(newCompany.toCompanyResponse())
+            }
         }
+
+        install(StatusPages) {
+            exception<BadRequestException> { cause ->
+                call.respond(HttpStatusCode.BadRequest, cause)
+            }
+        }
+
     }
 
 }

@@ -1,10 +1,7 @@
 package com.sedex.connect.domain.company
 
 import Address
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 data class CompanyResponse(
     var id: String = "123e4567-e89b-12d3-a456-556642440000",
