@@ -4,15 +4,18 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class ApplicationTest {
+
     @Test
-    fun testRoot() {
+    fun `should response with content when all companies requested`() {
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/").apply {
+            handleRequest(HttpMethod.Get, "/company").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("HELLO WORLD!", response.content)
+                assertFalse(response.content.isNullOrBlank())
             }
         }
     }
+
 }
